@@ -1,0 +1,62 @@
+# PRISM CI pipeline (reference).
+#
+# Copy to .github/workflows/ at the repo root to enable, or invoke the steps
+# from the existing repo CI. Kept here to avoid disturbing the parent repo's
+# workflows.
+
+name: prism-ci
+
+on:
+  push:
+    paths: ["prism/**"]
+  pull_request:
+    paths: ["prism/**"]
+
+defaults:
+  run:
+    working-directory: prism
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75.0
+        with:
+          components: rustfmt, clippy
+      - name: Format check
+        run: cargo fmt --all -- --check
+      - name: Clippy (pure-logic crates)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Unit tests
+        run: cargo test --workspace
+
+  indistinguishability-gate:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75.0
+
+      # JA4 parity is frozen as committed .ja4 strings under ci/baseline/. The
+      # live ClientHello is captured out-of-band on Windows (scripts/capture.ps1
+      # + extract_ja4.ps1) against the decoy origin and the verified strings are
+      # committed. Both files hold Chrome 148's QUIC JA4
+      # (q13d0311h3_55b375c5d22e_653d80c3fe9d); PRISM must match it byte-for-byte.
+      # Refresh with: scripts/validate.ps1 then copy testdata/prism.ja4 here.
+      - name: JA4 handshake parity
+        run: python3 scripts/ja4_compare.py ci/baseline/chrome_148.ja4 ci/baseline/prism.ja4
+
+      # Authoritative wire-shape gate: the morph engine's realized size/IAT
+      # distributions must stay within the 0.05 KL band of the CdnProfile.
+      # Deterministic, so it runs hermetically in CI.
+      - name: Morph KL fidelity gate
+        run: cargo test -p prism-morph --test morph_fidelity
+
+      # Statistical gate on representative profile-sampled summaries (hermetic):
+      # exercises prism-eval's size/IAT KL and the entropy band end-to-end.
+      - name: Statistical distribution gate
+        run: |
+          python3 scripts/sample_profile.py down 20000 1 > testdata/chrome_baseline.json
+          python3 scripts/sample_profile.py down 20000 2 > testdata/prism_capture.json
+          cargo run -p prism-eval -- testdata/chrome_baseline.json testdata/prism_capture.json

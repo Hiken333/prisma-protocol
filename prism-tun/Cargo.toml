@@ -1,0 +1,23 @@
+[package]
+name = "prism-tun"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "TUN device abstraction and IP-packet to QUIC stream mapping"
+
+[dependencies]
+anyhow.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+wintun = { workspace = true, optional = true }
+tun = { workspace = true, optional = true }
+
+[features]
+default = []
+device-wintun = ["dep:wintun"]
+device-linux = ["dep:tun"]
+device = ["device-wintun", "device-linux"]

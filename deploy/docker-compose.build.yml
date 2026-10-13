@@ -1,0 +1,26 @@
+# Build prism-server from source — run ONLY from the repo: cd prism/deploy
+# Requires the full prism/ tree (Cargo.toml, prism-server/, third_party/quiche/, …).
+#
+#   cp .env.example .env
+#   docker compose -f docker-compose.build.yml up -d --build
+
+services:
+  prism-server:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: anarac/prism-server:test
+    network_mode: host
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    env_file:
+      - .env
+    volumes:
+      - prism-data:/var/lib/prism
+    restart: unless-stopped
+
+volumes:
+  prism-data:

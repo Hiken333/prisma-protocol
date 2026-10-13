@@ -1,0 +1,26 @@
+[package]
+name = "prism-transport"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Native pure-Rust UDP transport for PRISM (real sockets, Reality handshake, AEAD, morphing)"
+
+[dependencies]
+prism-core.workspace = true
+prism-cc.workspace = true
+prism-morph.workspace = true
+prism-auth.workspace = true
+prism-decoy.workspace = true
+prism-fec.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+chacha20poly1305.workspace = true
+bytes.workspace = true
+
+[dev-dependencies]
+tracing-subscriber.workspace = true

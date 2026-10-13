@@ -1,0 +1,25 @@
+# Run a pre-loaded image (docker load -i prism-server.tar) — no build on VPS.
+# Usage: docker compose -f docker-compose.load.yml up -d
+# Alias: docker-compose.vps.yml (same layout for /opt/prisma flat directory).
+
+services:
+  prism-server:
+    image: anarac/prism-server:test
+    network_mode: host
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    env_file:
+      - .env
+    volumes:
+      - prism-data:/var/lib/prism
+    restart: unless-stopped
+    # Hotfix CRLF entrypoint in older images built on Windows
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - sed -i 's/\r$$//' /entrypoint.sh; exec /bin/sh /entrypoint.sh
+
+volumes:
+  prism-data:

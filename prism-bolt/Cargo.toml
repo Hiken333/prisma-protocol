@@ -1,0 +1,18 @@
+[package]
+name = "prism-bolt"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "PRISM BOLT — fixed-frame bulk UDP data plane after QUIC handshake"
+
+[dependencies]
+prism-core.workspace = true
+aes-gcm.workspace = true
+socket2.workspace = true
+thiserror.workspace = true
+futures.workspace = true
+tokio.workspace = true
+tracing.workspace = true

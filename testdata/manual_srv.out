@@ -1,0 +1,2 @@
+2026-06-07T07:25:42.389322Z  INFO prism_server: publish this shadow_pk in the client subscription (client --shadow-pk) shadow_pk=7b4e909bbe7ffe44c465a220037d608ee35897d31ef972f07f74892cb0f73f13
+2026-06-07T07:25:42.390171Z  INFO prism_server: quiche backend: server ready; press Ctrl+C to stop listen=127.0.0.1:4433

@@ -1,0 +1,93 @@
+[workspace]
+resolver = "2"
+members = [
+    "prism-bolt",
+    "prism-fec",
+    "prism-core",
+    "prism-cc",
+    "prism-morph",
+    "prism-auth",
+    "prism-quic",
+    "prism-transport",
+    "prism-decoy",
+    "prism-tun",
+    "prism-client",
+    "prism-server",
+    "prism-eval",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT OR Apache-2.0"
+authors = ["Anarac"]
+repository = "https://github.com/anarac/prism"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+futures = "0.3"
+socket2 = "0.6"
+bytes = "1"
+
+# FEC
+reed-solomon-erasure = "6"
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Crypto (offline / non-wire-visible primitives only)
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+hkdf = "0.12"
+hmac = "0.12"
+sha2 = "0.10"
+subtle = "2"
+chacha20poly1305 = "0.10"
+aes-gcm = "0.10"
+
+# PRNG
+rand = "0.8"
+rand_chacha = "0.3"
+rand_distr = "0.4"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+bincode = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Internal crates
+prism-bolt = { path = "prism-bolt" }
+prism-fec = { path = "prism-fec" }
+prism-core = { path = "prism-core" }
+prism-cc = { path = "prism-cc" }
+prism-morph = { path = "prism-morph" }
+prism-auth = { path = "prism-auth" }
+prism-quic = { path = "prism-quic" }
+prism-transport = { path = "prism-transport" }
+prism-decoy = { path = "prism-decoy" }
+prism-tun = { path = "prism-tun" }
+
+# TUN device backends (optional per crate)
+wintun = "0.5"
+tun = { version = "0.6", features = ["async"] }
+
+[profile.release]
+# Timing precision matters: keep panics cheap, optimize aggressively.
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+
+# Override the crates.io `quiche` with the vendored PRISM fork. The fork adds the
+# extension points PRISM needs (TLS exporter access, frame-level padding to a
+# target size, explicit PING) that stock quiche keeps internal. See
+# third_party/quiche and docs/quiche-fork.md.
+[patch.crates-io]
+quiche = { path = "third_party/quiche/quiche" }

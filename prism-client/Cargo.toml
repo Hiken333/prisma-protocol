@@ -1,0 +1,36 @@
+[package]
+name = "prism-client"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "PRISM client: TUN <-> engine <-> UDP"
+
+[[bin]]
+name = "prism-client"
+path = "src/main.rs"
+
+[dependencies]
+prism-core.workspace = true
+prism-cc.workspace = true
+prism-morph.workspace = true
+prism-auth.workspace = true
+prism-quic = { workspace = true, features = ["test-backend"] }
+prism-transport.workspace = true
+prism-tun = { workspace = true, optional = true }
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+# timeBeginPeriod(1): default Windows timer granularity (~15.6 ms) inflates
+# every tokio sleep/timeout in the tunnel hot loop (idle poll, loss timers).
+windows-sys = { version = "0.52", features = ["Win32_Media"] }
+
+[features]
+default = []
+quiche-backend = ["prism-quic/quiche-backend"]
+tunnel = ["quiche-backend", "prism-quic/tunnel", "dep:prism-tun", "prism-tun/device-wintun"]

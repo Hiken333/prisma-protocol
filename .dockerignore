@@ -1,0 +1,23 @@
+# Rust build artifacts (local target/ was ~2.5 GB — do not send to Docker daemon)
+target/
+
+# Git / IDE
+.git
+.gitignore
+**/.cursor
+**/.vscode
+
+# Captures / test outputs
+testdata/*.pcap
+testdata/*.pcapng
+testdata/*.err
+ci/baseline/*.pcap
+
+# Local deploy secrets
+deploy/.env
+
+# Docs / scripts not needed in image
+scripts/
+docs/
+*.md
+!deploy/README.md

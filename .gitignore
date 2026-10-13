@@ -1,0 +1,26 @@
+/target
+**/*.rs.bk
+Cargo.lock
+*.pcapng
+/testdata/*.json
+/testdata/*.ja4
+# Throwaway self-signed cert/key + openssl config for the live selftest.
+/testdata/*.pem
+/testdata/*.cnf
+# Generic build logs from the native (quiche-backend) build.
+/build_*.log
+/run_*.log
+/eval_*.log
+
+# Build logs from the native (quiche-backend) build.
+/build_quiche*.log
+/clone_quiche.log
+
+# Vendored quiche + BoringSSL fork. Reproduced via scripts/vendor-quiche.ps1 and
+# the tracked patches in patches/. Too large (BoringSSL) to commit verbatim.
+/third_party/
+
+# Local deploy secrets and throwaway artifacts.
+/deploy/.env
+*.tar
+*.log

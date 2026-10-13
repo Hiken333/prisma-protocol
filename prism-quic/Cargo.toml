@@ -1,0 +1,34 @@
+[package]
+name = "prism-quic"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "QUIC backend abstraction, Mirror-Cell encoder/decoder and the morph-aware send loop"
+
+[dependencies]
+prism-bolt = { workspace = true, optional = true }
+prism-core.workspace = true
+prism-cc.workspace = true
+prism-morph.workspace = true
+prism-auth.workspace = true
+prism-transport = { workspace = true, optional = true }
+prism-tun = { workspace = true, optional = true }
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+# Real QUIC backend. Gated so the pure-logic crate builds without a native
+# BoringSSL/quiche toolchain.
+quiche = { version = "0.22", optional = true }
+socket2 = { workspace = true, optional = true }
+
+[features]
+default = []
+quiche-backend = ["dep:quiche", "dep:socket2"]
+transport-backend = ["dep:prism-transport"]
+tunnel = ["quiche-backend", "dep:prism-tun", "dep:prism-bolt"]
+# Exposes the in-memory `LoopbackBackend` to downstream crates' tests.
+test-backend = []

@@ -1,0 +1,19 @@
+[package]
+name = "prism-eval"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Indistinguishability evaluation: KL divergence, entropy, JA4 parity"
+
+[[bin]]
+name = "prism-eval"
+path = "src/main.rs"
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true

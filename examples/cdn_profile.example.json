@@ -1,0 +1,24 @@
+{
+  "size_hist": {
+    "buckets": [
+      { "lo": 200.0, "hi": 400.0, "weight": 0.10, "sigma": 40.0 },
+      { "lo": 400.0, "hi": 800.0, "weight": 0.15, "sigma": 60.0 },
+      { "lo": 800.0, "hi": 1200.0, "weight": 0.25, "sigma": 80.0 },
+      { "lo": 1200.0, "hi": 1452.0, "weight": 0.50, "sigma": 30.0 }
+    ]
+  },
+  "iat_hist": {
+    "buckets": [
+      { "lo": 0.5, "hi": 2.0, "weight": 0.50, "sigma": 0.3 },
+      { "lo": 2.0, "hi": 10.0, "weight": 0.30, "sigma": 2.0 },
+      { "lo": 10.0, "hi": 50.0, "weight": 0.15, "sigma": 8.0 },
+      { "lo": 50.0, "hi": 500.0, "weight": 0.05, "sigma": 50.0 }
+    ]
+  },
+  "bursts": [
+    { "packets": 8, "inter_burst_pause_ms": 15.0, "weight": 0.5 },
+    { "packets": 24, "inter_burst_pause_ms": 40.0, "weight": 0.3 },
+    { "packets": 64, "inter_burst_pause_ms": 120.0, "weight": 0.2 }
+  ],
+  "direction_ratio": 0.12
+}

@@ -1,0 +1,20 @@
+[package]
+name = "prism-morph"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "CDN Profile Replay morphing engine and entropy regularization"
+
+[dependencies]
+prism-core.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand_distr.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+rand_chacha.workspace = true

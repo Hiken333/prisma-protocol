@@ -1,0 +1,32 @@
+[package]
+name = "prism-server"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "PRISM server: UDP <-> engine <-> {PRISM | decoy}"
+
+[[bin]]
+name = "prism-server"
+path = "src/main.rs"
+
+[dependencies]
+prism-core.workspace = true
+prism-cc.workspace = true
+prism-morph.workspace = true
+prism-auth.workspace = true
+prism-quic = { workspace = true, features = ["test-backend"] }
+prism-transport.workspace = true
+prism-decoy.workspace = true
+prism-tun = { workspace = true, optional = true }
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[features]
+default = []
+quiche-backend = ["prism-quic/quiche-backend"]
+tunnel = ["quiche-backend", "prism-quic/tunnel", "dep:prism-tun", "prism-tun/device-linux"]
